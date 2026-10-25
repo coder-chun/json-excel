@@ -1,0 +1,14 @@
+services:
+  json-excel:
+    build:
+      context: .
+      args:
+        # 基础镜像加速源（Docker Hub 直连不通时使用）；可访问 Docker Hub 的环境可改为 docker.io/library
+        REGISTRY: docker.m.daocloud.io/library
+    image: json-excel:latest
+    container_name: json-excel
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    environment:
+      - JAVA_OPTS=-XX:MaxRAMPercentage=75.0
