@@ -1,0 +1,25 @@
+# ---------- Stage 1: 构建前端 ----------
+ARG REGISTRY=docker.io/library
+
+FROM ${REGISTRY}/node:20-alpine AS frontend-build
+WORKDIR /build
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm ci
+COPY frontend/ ./
+RUN npm run build
+
+# ---------- Stage 2: Python 运行时 ----------
+FROM ${REGISTRY}/python:3.11-slim
+ENV PYTHONUNBUFFERED=1 \
+    PORT=8080 \
+    FRONTEND_DIST=/app/dist
+WORKDIR /app
+
+COPY backend-py/requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY backend-py/ ./
+COPY --from=frontend-build /build/dist /app/dist
+
+EXPOSE 8080
+CMD ["python", "app.py"]

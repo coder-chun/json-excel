@@ -1,0 +1,10 @@
+.git
+.gitignore
+.codebuddy
+**/node_modules
+frontend/dist
+backend/target
+backend-py/.venv
+**/__pycache__
+*.log
+.DS_Store

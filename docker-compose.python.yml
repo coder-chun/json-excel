@@ -1,0 +1,17 @@
+services:
+  json-excel-py:
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+      args:
+        # 基础镜像加速源（Docker Hub 直连不通时使用）；可访问 Docker Hub 的环境可改为 docker.io/library
+        REGISTRY: docker.m.daocloud.io/library
+    image: json-excel-py:latest
+    container_name: json-excel-py
+    ports:
+      - "8081:8080"
+    environment:
+      - PORT=8080
+      - PREVIEW_MAX_ROWS=200
+      - EXCEL_MAX_ROWS=20000
+    restart: unless-stopped
